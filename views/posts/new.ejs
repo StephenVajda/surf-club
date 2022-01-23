@@ -1,0 +1,21 @@
+
+<link rel="stylesheet" href="stylesheets/style.css">
+<h1>NEW POST</h1>
+<form action="/posts" method="post" id="new">
+    <div><input name="post[title]" type="text" placeholder="title"></div>
+    <div><input name="post[price]" type="text" placeholder="price"></div>
+    <div><textarea name="post[description]" id="" cols="30" rows="10" placeholder="description"></textarea></div>
+    <div><input name="post[location]" type="text" placeholder="location"></div>
+    <input type="submit" >
+</form>
+
+<!--
+title:String,
+price:String,
+description:String,
+images:[String],
+location:String,
+lat:Number,
+lng:Number,
+
+-->
