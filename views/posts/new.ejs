@@ -1,4 +1,4 @@
-
+<% layout('layouts/boilerplate.ejs') %>
 <link rel="stylesheet" href="stylesheets/style.css">
 <h1>NEW POST</h1>
 <form action="/posts" method="post" id="new" enctype="multipart/form-data">
@@ -12,13 +12,4 @@
     <input type="submit" >
 </form>
 
-<!--
-title:String,
-price:String,
-description:String,
-images:[String],
-location:String,
-lat:Number,
-lng:Number,
-
--->
+<style="/javascripts/post-edit.js"></style>

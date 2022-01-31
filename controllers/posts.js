@@ -13,7 +13,8 @@ module.exports={
       res.render('posts/index',{posts});
     },
       postNew(req,res,next){
-         res.render('posts/new');
+        res.render('posts/new');
+       
       },
     async postCreate(req,res,next){
        req.body.post.images=[];
@@ -33,6 +34,7 @@ module.exports={
        const coordinates=response.body.features[0].geometry.coordinates;
        req.body.post.coordinates=coordinates;
        let post= await Post.create(req.body.post);
+       req.session.success='Post created successfully!';
        res.redirect(`posts/${post.id}`);
      },
     async postShow(req,res,next){

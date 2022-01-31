@@ -9,6 +9,8 @@ a {
 
 #new{
  display: flex;
- justify-content: center center;
- background-color: yellow;
+ flex-direction: column;
+ justify-content: space-between center;
+  max-width: 200px;
+ gap:20px;
 }
