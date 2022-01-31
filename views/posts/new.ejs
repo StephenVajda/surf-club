@@ -1,9 +1,12 @@
 
 <link rel="stylesheet" href="stylesheets/style.css">
 <h1>NEW POST</h1>
-<form action="/posts" method="post" id="new">
+<form action="/posts" method="post" id="new" enctype="multipart/form-data">
     <div><input name="post[title]" type="text" placeholder="title"></div>
     <div><input name="post[price]" type="text" placeholder="price"></div>
+    <div>
+        <input type="file" accept="images/*" name="images" multiple >
+    </div>
     <div><textarea name="post[description]" id="" cols="30" rows="10" placeholder="description"></textarea></div>
     <div><input name="post[location]" type="text" placeholder="location"></div>
     <input type="submit" >

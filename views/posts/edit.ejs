@@ -1,6 +1,6 @@
 <h1>Edit Post</h1>
 
-<form action="/posts/<%= post.id %>?_method=PUT" method="POST" >
+<form action="/posts/<%= post.id %>?_method=PUT" method="POST" id="postEditForm" enctype="multipart/form-data" >
     <div>
         <input name="post[title]" type="text" placeholder="title" value="<%= post.title %>">
     </div>
@@ -8,12 +8,25 @@
         <input name="post[price]" type="text" placeholder="price" value="<%= post.price %>">
     </div>
     <div>
+    <% post.images.forEach(function(image, i){%>
+       <img  src="<%= image.url %>" alt="image" width="100"/>
+       <label for="image<%= i %>">Delete?</label>
+       <input type="checkbox" name="deleteImages[]" id="image<%= i %>" class="imageDeleteCheckbox" value="<%= image.public_id %>">
+    <%})%>
+    </div>
+
+    <div>
+        <input type="file" id="imageUpload" accept="images/*" name="images" multiple >
+    </div>
+    <div>
         <textarea name="post[description]" id="desc" cols="30" rows="10" placeholder="description"><%= post.description %></textarea>
     </div>
     <div>
         <input name="post[location]" type="text" placeholder="location" value="<%= post.location %>">
     </div>
+    
     <div>
         <input type="submit" >
     </div>
 </form>
+<script src="../javascripts/post-edit.js"></script>

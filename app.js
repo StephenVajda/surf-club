@@ -1,4 +1,6 @@
+require('dotenv').config();
 const express = require('express');
+const engine = require('ejs-mate');  
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
@@ -25,9 +27,12 @@ db.once('open', () => {
   console.log('we\'re connected!');
 });*/
 
+app.engine('ejs', engine);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+//set up public assets directory
+app.use(express.static('public'));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

@@ -1,4 +1,12 @@
 const Post=require('../models/post');
+const mbxGeocoding=require('@mapbox/mapbox-sdk/services/geocoding');
+const geocodingClient=mbxGeocoding({accessToken:process.env.MAPBOX_TOKEN});
+const cloudinary=require('cloudinary');
+cloudinary.config({
+   cloud_name:'sasv5853',
+   api_key:'386451416355363',
+   api_secret:process.env.CLOUDINARY_SECRET
+})
 module.exports={
    async postIndex(req,res,next){
       let posts=await Post.find({});
@@ -8,6 +16,22 @@ module.exports={
          res.render('posts/new');
       },
     async postCreate(req,res,next){
+       req.body.post.images=[];
+       for(const file of req.files){
+          let image=await cloudinary.v2.uploader.upload(file.path);
+          req.body.post.images.push({
+             url:image.secure_url,
+             public_id:image.public_id
+          });
+       }
+       let response= await geocodingClient
+       .forwardGeocode({
+           query:req.body.post.location,
+           limit: 1 
+       })
+       .send();
+       const coordinates=response.body.features[0].geometry.coordinates;
+       req.body.post.coordinates=coordinates;
        let post= await Post.create(req.body.post);
        res.redirect(`posts/${post.id}`);
      },
@@ -20,11 +44,65 @@ module.exports={
         res.render('posts/edit',{post});
      },
      async postUpdate(req,res,next){
-     let post=await Post.findByIdAndUpdate(req.params.id,req.body.post);
+      //handle deletion of any new images
+
+        //handle upload of any new images
+     let post=await Post.findById(req.params.id);
+     //check if any images for deletion
+     if(req.body.deleteImages && req.body.deleteImages.length){
+        let deleteImages=req.body.deleteImages;
+        //loop over delete images
+        for( const public_id of deleteImages){
+           //delete images from cloudinary
+        await cloudinary.v2.uploader.destroy(public_id);
+        //delete image from post.images
+        for(const image of post.images){
+           if(image.public_id===public_id){
+            let index=post.images.indexOf(image);
+              post.images.splice(index,1);
+           }
+         }
+        }
+      }
+      //check if there are any new images to upload
+      if(req.files){
+         //upload images
+         for(const file of req.files){
+            let image=await cloudinary.v2.uploader.upload(file.path);
+            //add images to post.images array?
+            post.images.push({
+               url:image.secure_url,
+               public_id:image.public_id
+            })
+         };
+      }
+      //check if location was updated
+      if(req.body.post.location !=post.location){
+         let response= await geocodingClient
+         .forwardGeocode({
+           query:req.body.post.location,
+           limit: 1 
+       })
+       .send();
+      post.coordinates=response.body.features[0].geometry.coordinates;
+      post.location=req.body.post.location;
+      }
+      //update the post with any new properties
+      post.title=req.body.post.title;
+      post.price=req.body.post.price;
+      post.description=req.body.post.description;
+      
+      //save the post with any new properties to the db
+      post.save();
+     //redirect to the show page
      res.redirect(`/posts/${post.id}`);
    },
    async postDestroy(req,res,next){
-      await Post.findByIdAndRemove(req.params.id);
+      let post=await Post.findById(req.params.id);
+      for(const image of post.images){
+         await cloudinary.v2.uploader.destroy(image.public_id);
+      }
+      await post.remove();
       res.redirect('/posts');
 
    }
