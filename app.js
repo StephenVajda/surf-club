@@ -20,12 +20,7 @@ const app = express();
 const mongo = require('./middleware/mongo');
 // connect to the database
 mongo();
-/*
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-  console.log('we\'re connected!');
-});*/
+
 //use ejs-locals for all ejs templates
 app.engine('ejs', engine);
 // view engine setup
@@ -58,6 +53,12 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 // set default local variables
 app.use(function(req,res,next){
+  req.user={ //mike:61faf6a0fe8c56f35a82a1c7
+    //steve:61f93c04741f577d04f5126c
+    '_id':'61faf6a0fe8c56f35a82a1c7',
+    password:'abc123' 
+  }
+  res.locals.currentUser=req.user;
   res.locals.title="Surf Shop";
   //set sucess flash message;
   res.locals.success=req.session.success || '';

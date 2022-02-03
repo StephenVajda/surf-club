@@ -6,3 +6,5 @@ var post = <%- JSON.stringify(post) %>;
 
 Then add "html.validate.scripts": false to the users
  settings.json file and that should fix the issue.
+ using curl
+ curl -d "username=mike&password=abc123" -X POST http://localhost:3000/register   

@@ -1,5 +1,4 @@
-<% layout('layouts/post-show-layout.ejs') %>
-<link rel="stylesheet" href="stylesheets/post-show.css">
+<% layout('layouts/post-show-layout') %>
 
 <h1><%= post.title %></h1>
 <div>Price: <%= post.price %></div>
@@ -24,7 +23,7 @@
 
 <h2>Create a Review</h2>
 <form action="/posts/<%= post.id %>/reviews" method="POST">
-<textarea name="review[body]" id="" cols="30" rows="10" required></textarea>
+<textarea name="review[body]" id="" cols="20" rows="2" required></textarea>
 <input type="number" name="review[rating]" min="1" max="5" step="1" required>
 <input type="submit">
 
@@ -32,11 +31,35 @@
 <h3>Reviews</h3>
 	<% post.reviews.forEach(function(review){ %>
 		<div>
-			<%= review.body  %> 
+			Author:<%= review.author.username  %><br>
+			<%= review.body  %> <br>
 			Rating: <%= review.rating  %> 
 		</div>
+		<div>
+			<button class="toggle-edit-form">Edit</button>
+			<form class="edit-review-form"
+			action="/posts/<%= post.id %>/reviews/<%= review.id %>?_method=PUT"
+			method="POST" >
+				<textarea name="review[body]" 
+						id="" cols="20" 
+						rows="2" 
+						required><%= review.body%>
+				</textarea>
+				<input type="number" 
+						name="review[rating]" 
+						min="1" max="5" 
+						step="1" 
+						value="<%= review.rating %>" required>
+				
+				<input type="submit" value="Update">
+			</form>
+		</div>
+		<hr>
 	<% }) %>
+<script>
+	
 
+</script>
 
 
 
