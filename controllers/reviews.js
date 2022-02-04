@@ -23,7 +23,13 @@ module.exports={
         res.redirect(`/posts/${req.params.id}`)
       },
     async reviewDestroy(req,res,next){
-       
+      await Post.findByIdAndUpdate(req.params.id,{
+        $pull:{reviews:req.params.review_id}
+      });
+      
+      Review.findByIdAndRemove(req.params.review_id);
+      req.session.success='Review deleted successfully';
+      res.redirect(`/posts/${req.params.id}`)
     },
     
 }
