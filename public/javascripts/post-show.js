@@ -25,4 +25,7 @@ var map = new mapboxgl.Map({
   //toggle the visibility
   $(this).siblings('.edit-review-form').toggle();
 });
-
+ //Add click listener for clearing of raiang
+$('.clear-rating').click(function(){
+  $(this).siblings('.input-no-rate').click();
+})
