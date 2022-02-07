@@ -56,9 +56,10 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 // set default local variables
 app.use(function(req,res,next){
-  req.user={ //mike:61faf6a0fe8c56f35a82a1c7
-    //steve:61f93c04741f577d04f5126c
-    '_id':'61faf6a0fe8c56f35a82a1c7',
+  req.user={ //mike: 61faf6a0fe8c56f35a82a1c7
+    //steve: 61f93c04741f577d04f5126c
+    //shinko: 62003c91966647c1aa6a5cf5
+    '_id':'62003c91966647c1aa6a5cf5',
     password:'abc123' 
   }
   res.locals.currentUser=req.user;

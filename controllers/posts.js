@@ -51,7 +51,9 @@ module.exports={
               model:'User'
            }
         });
-        res.render('posts/show',{post});
+        const floorRating=post.calculateAvgRating();
+        let mapBoxToken=process.env.MAPBOX_TOKEN;
+        res.render('posts/show',{post,mapBoxToken,floorRating});
      },
      async postEdit(req,res,next){
         let post=await Post.findById(req.params.id);
